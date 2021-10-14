@@ -1,0 +1,18 @@
+.container {
+  composes: display-flex from global;
+}
+
+.avatar-button {
+  composes: text-center cursor-pointer p-4 mr-16 border-rounded from global;
+  background-color: var(--color-transparent);
+  border: 1px solid var(--color-transparent);
+}
+
+.avatar-button:last-child {
+  margin-right: 0;
+}
+
+.avatar-button:hover {
+  background-color: var(--color-grey-200);
+  border-color: var(--color-grey-200);
+}
