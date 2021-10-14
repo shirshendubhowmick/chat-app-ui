@@ -86,6 +86,7 @@ async function initNetworkRequest({
       method,
       headers,
       body: JSON.stringify(body),
+      credentials: 'include',
     });
     const returnObj: ApiResponseObject = {
       headers: response.headers,
