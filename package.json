@@ -9,7 +9,15 @@
     "build:prod": "webpack --config webpack.prod.js --progress",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
+    "prepare": "husky install",
     "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint",
+      "prettier"
+    ],
+    "*.css": "stylelint"
   },
   "repository": {
     "type": "git",
@@ -54,6 +62,7 @@
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "html-webpack-plugin": "^5.3.2",
+    "husky": "^7.0.2",
     "lint-staged": "^11.2.3",
     "postcss": "^8.3.9",
     "postcss-custom-media": "^8.0.0",
