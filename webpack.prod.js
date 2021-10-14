@@ -1,8 +1,17 @@
+const { DefinePlugin } = require('webpack');
 const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const common = require('./webpack.common');
+
+const commonWebpackConstants = require('./webpackConstants/common');
+const developmentWebpackConstants = require('./webpackConstants/development');
+
+const finalWebpackConstants = {
+  ...commonWebpackConstants,
+  ...developmentWebpackConstants,
+};
 
 module.exports = merge(common, {
   mode: 'production',
@@ -21,6 +30,9 @@ module.exports = merge(common, {
         minifyCSS: true,
         minifyURLs: true,
       },
+    }),
+    DefinePlugin({
+      ...finalWebpackConstants,
     }),
   ],
   optimization: {

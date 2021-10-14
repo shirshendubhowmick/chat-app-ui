@@ -1,7 +1,20 @@
 const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { DefinePlugin } = require('webpack');
 
 const common = require('./webpack.common');
+
+const commonWebpackConstants = require('./webpackConstants/common');
+const developmentWebpackConstants = require('./webpackConstants/development');
+
+const finalWebpackConstants = {
+  ...commonWebpackConstants,
+  ...developmentWebpackConstants,
+};
+
+Object.keys(finalWebpackConstants).forEach((key) => {
+  finalWebpackConstants[key] = JSON.stringify(finalWebpackConstants[key]);
+});
 
 module.exports = merge(common, {
   mode: 'development',
@@ -9,6 +22,9 @@ module.exports = merge(common, {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
+    }),
+    new DefinePlugin({
+      ...finalWebpackConstants,
     }),
     // new HotModuleReplacementPlugin(),
   ],
