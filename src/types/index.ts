@@ -3,6 +3,10 @@ export interface UserData {
   name: string;
 }
 
+export interface AdminUserPositionStatus {
+  isAdminUserPositionAvailable: boolean;
+}
+
 export type SocketStatus =
   | 'CONNECTED'
   | 'DISCONNECTED'

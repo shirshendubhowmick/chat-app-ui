@@ -7,24 +7,40 @@ import AvatarSelector from './components/AvatarSelector/AvatarSelector';
 import initNetworkRequest from '~/services/networkServices';
 
 import apiMap from '~/constants/apiMap';
-import { UserData } from '~/types';
+import { AdminUserPositionStatus, SocketStatus, UserData } from '~/types';
 import initSocketConnection from '~/services/socketService';
+import { socketStatusMap } from '~/constants';
 
 import './Chat.css';
 
 function Chat() {
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
   const [adminUserData, setAdminUserData] = useState<UserData | null>(null);
+  const [socketStatus, setSocketStatus] = useState<SocketStatus>(
+    socketStatusMap.CONNECTING,
+  );
 
   useEffect(() => {
-    setShowAvatarSelector(true);
-    initSocketConnection();
+    initNetworkRequest({
+      method: apiMap.GET_SESSION_STATUS.method,
+      URL: API_URL + apiMap.GET_SESSION_STATUS.endpoint,
+    })
+      .then((res) => {
+        const { data }: { data: AdminUserPositionStatus } = res.data;
+        if (data.isAdminUserPositionAvailable) {
+          setShowAvatarSelector(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   useEffect(() => {
     if (adminUserData) {
       console.log(adminUserData);
       setShowAvatarSelector(false);
+      initSocketConnection(setSocketStatus);
     }
   }, [adminUserData]);
 
@@ -46,7 +62,7 @@ function Chat() {
 
   return (
     <div styleName="container">
-      <ChatHeader />
+      <ChatHeader socketStatus={socketStatus} name={adminUserData?.name} />
       <ChatWindow />
       {showAvatarSelector && (
         <Modal headerContent="Select user">

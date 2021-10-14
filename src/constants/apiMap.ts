@@ -11,6 +11,7 @@ const httpMethods: { [key in HttpMethods]: HttpMethods } = {
 
 const endpoint = {
   SESSION: '/user/session',
+  SESSION_STATUS: '/status/session',
 };
 
 const apiMap: {
@@ -26,6 +27,10 @@ const apiMap: {
   GET_SESSION: {
     endpoint: endpoint.SESSION,
     method: httpMethods.POST,
+  },
+  GET_SESSION_STATUS: {
+    endpoint: endpoint.SESSION_STATUS,
+    method: httpMethods.GET,
   },
 };
 
