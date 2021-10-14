@@ -1,0 +1,47 @@
+h1 {
+  font-weight: 700;
+  line-height: 1.6;
+  font-size: 20px;
+}
+
+h2 {
+  font-weight: 500;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+h3 {
+  font-weight: 500;
+  line-height: 1.43;
+  font-size: 14px;
+}
+
+h4 {
+  font-weight: 500;
+  line-height: 1.33;
+  font-size: 12px;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-12 {
+  font-size: 12px;
+}
+
+.font-14 {
+  font-size: 14px;
+}
+
+.font-16 {
+  font-size: 16px;
+}

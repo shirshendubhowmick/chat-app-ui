@@ -1,0 +1,15 @@
+.border-default {
+  border: 1px solid var(--color-grey-400);
+}
+
+.border-color-transparent {
+  border-color: transparent;
+}
+
+.border-rounded {
+  border-radius: 4px;
+}
+
+.border-circle {
+  border-radius: 50%;
+}
