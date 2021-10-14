@@ -1,7 +1,14 @@
-import ChatContainer from './components/ChatContainer/ChatContainer';
+import ChatHeader from './components/ChatHeader/ChatHeader';
+import ChatWindow from './components/ChatWindow/ChatWindow';
+import './Chat.css';
 
 function Chat() {
-  return <ChatContainer />;
+  return (
+    <div styleName="container">
+      <ChatHeader />
+      <ChatWindow />
+    </div>
+  );
 }
 
 export default Chat;
