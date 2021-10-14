@@ -8,6 +8,7 @@ import initNetworkRequest from '~/services/networkServices';
 
 import apiMap from '~/constants/apiMap';
 import { UserData } from '~/types';
+import initSocketConnection from '~/services/socketService';
 
 import './Chat.css';
 
@@ -17,6 +18,7 @@ function Chat() {
 
   useEffect(() => {
     setShowAvatarSelector(true);
+    initSocketConnection();
   }, []);
 
   useEffect(() => {
