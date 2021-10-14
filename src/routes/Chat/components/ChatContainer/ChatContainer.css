@@ -1,0 +1,5 @@
+.container {
+  composes: mlr-auto pt-32 pb-32 display-flex flex-column from global;
+  height: 100vh;
+  max-width: 60vw;
+}

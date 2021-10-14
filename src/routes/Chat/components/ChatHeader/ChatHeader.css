@@ -1,0 +1,6 @@
+.container {
+  composes: pl-16 pr-16 pt-24 pb-24 from global;
+  background-color: var(--color-grey-800);
+  color: var(--color-white);
+  border-radius: 4px 4px 0 0;
+}

@@ -1,7 +1,9 @@
+import Chat from './routes/Chat/Chat';
+
 import './styles/index.css';
 
 function App() {
-  return <p>Hello World from React</p>;
+  return <Chat />;
 }
 
 export default App;
