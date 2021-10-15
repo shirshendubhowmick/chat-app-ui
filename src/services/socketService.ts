@@ -71,6 +71,7 @@ function subscribeToAdminPosition(
   const adminPositionAvailable = () => {
     console.log('Received admin position availability message');
     setState(true);
+    socket.disconnect();
   };
   socket.on('adminPositionAvailable', adminPositionAvailable);
 

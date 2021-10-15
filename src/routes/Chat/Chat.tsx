@@ -13,6 +13,7 @@ import initSocketConnection, {
 } from '~/services/socketService';
 import { socketStatusMap } from '~/constants';
 import ChatWindowLoading from './components/ChatWindowLoading/ChatWindowLoading';
+import apiErrorMap from '~/constants/apiErrorMap';
 
 import './Chat.css';
 
@@ -22,7 +23,6 @@ function Chat() {
   const [socketStatus, setSocketStatus] = useState<SocketStatus>(
     socketStatusMap.CONNECTING,
   );
-  const [isStatusCheckDone, setIsStatusCheckDone] = useState(false);
 
   useEffect(() => {
     initNetworkRequest({
@@ -36,7 +36,6 @@ function Chat() {
         } else {
           initSocketConnection(setSocketStatus);
         }
-        setIsStatusCheckDone(true);
       })
       .catch((err) => {
         console.log(err);
@@ -75,15 +74,23 @@ function Chat() {
       });
       const { data: userData }: { data: UserData } = response.data;
       setAdminUserData(userData);
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
+      if (!err.fetchFailure) {
+        const { errors } = err.data;
+        if (errors?.[0].code === apiErrorMap.E005.code) {
+          console.log(errors?.[0].detail);
+          initSocketConnection(setSocketStatus);
+          setShowAvatarSelector(false);
+        }
+      }
     }
   }, []);
 
   return (
     <div styleName="container">
       <ChatHeader socketStatus={socketStatus} name={adminUserData?.name} />
-      {!isStatusCheckDone || showAvatarSelector ? (
+      {socketStatus !== socketStatusMap.CONNECTED ? (
         <ChatWindowLoading />
       ) : (
         <ChatWindow socketStatus={socketStatus} adminUserData={adminUserData} />
