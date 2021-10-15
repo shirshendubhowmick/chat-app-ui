@@ -105,7 +105,8 @@ async function initNetworkRequest({
     };
     // * response was successful (status in the range 200-299) or not.
     if (!response.ok) {
-      return await Promise.reject(returnObj);
+      // eslint-disable-next-line @typescript-eslint/return-await
+      return Promise.reject(returnObj);
     }
     return returnObj;
   } catch (err: any) {
