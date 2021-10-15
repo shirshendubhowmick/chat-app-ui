@@ -64,6 +64,21 @@ function subscribeToSystemMessage(updateMessage: (arg: Message) => void) {
   });
 }
 
+function subscribeToAdminPosition(
+  setState: React.Dispatch<React.SetStateAction<boolean>>,
+) {
+  console.log('Registered for admin position availability');
+  const adminPositionAvailable = () => {
+    console.log('Received admin position availability message');
+    setState(true);
+  };
+  socket.on('adminPositionAvailable', adminPositionAvailable);
+
+  return () => {
+    socket.off('adminPositionAvailable', adminPositionAvailable);
+  };
+}
+
 export default initSocketConnection;
 
 export {
@@ -71,4 +86,5 @@ export {
   subscribeToMessageBroadcast,
   unsubscribeToMessageBroadcast,
   subscribeToSystemMessage,
+  subscribeToAdminPosition,
 };

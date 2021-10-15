@@ -8,7 +8,9 @@ import initNetworkRequest from '~/services/networkServices';
 
 import apiMap from '~/constants/apiMap';
 import { AdminUserPositionStatus, SocketStatus, UserData } from '~/types';
-import initSocketConnection from '~/services/socketService';
+import initSocketConnection, {
+  subscribeToAdminPosition,
+} from '~/services/socketService';
 import { socketStatusMap } from '~/constants';
 import ChatWindowLoading from './components/ChatWindowLoading/ChatWindowLoading';
 
@@ -48,6 +50,19 @@ function Chat() {
       initSocketConnection(setSocketStatus);
     }
   }, [adminUserData]);
+
+  useEffect(() => {
+    let unsubscribe: () => void;
+    if (socketStatus === socketStatusMap.CONNECTED) {
+      unsubscribe = subscribeToAdminPosition(setShowAvatarSelector);
+    }
+
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
+  }, [socketStatus]);
 
   const onAvatarSelect = useCallback(async (userId: string) => {
     try {
