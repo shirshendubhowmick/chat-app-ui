@@ -1,18 +1,28 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import MessageInput from '../MessageInput/MessageInput';
-import { sendMessage as socketSendMessage } from '~/services/socketService';
+import {
+  AcknowledgementMessage,
+  sendMessage as socketSendMessage,
+  subscribeToMessageBroadcast,
+  unsubscribeToMessageBroadcast,
+} from '~/services/socketService';
 import MessageViewer from '../MessageViewer/MessageViewer';
-import { Messages, UserData } from '~/types';
+import { Message, SocketStatus, UserData } from '~/types';
+import { socketStatusMap } from '~/constants';
 
 import './ChatWindow.css';
 
 export interface ChatWindowProps {
   adminUserData: UserData | null;
+  socketStatus: SocketStatus;
 }
 
 function ChatWindow(props: ChatWindowProps) {
-  const [messages, setMessages] = useState<Messages[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const msgViewerRef = useRef<HTMLDivElement | null>(null);
+
+  const connectedAsViewer =
+    props.socketStatus === socketStatusMap.CONNECTED && !props.adminUserData;
 
   const sendMessage = useCallback(
     (message: string) => {
@@ -20,20 +30,33 @@ function ChatWindow(props: ChatWindowProps) {
       if (!sanitizedMessage) {
         return;
       }
-      setMessages((currentState) => [
-        ...currentState,
-        {
-          userId: (props.adminUserData as UserData).userId,
-          name: (props.adminUserData as UserData).name,
-          content: {
-            text: message,
+
+      socketSendMessage(message, (ack: AcknowledgementMessage) => {
+        setMessages((currentState) => [
+          ...currentState,
+          {
+            id: ack.msgId,
+            timestamp: ack.timestamp,
+            userId: (props.adminUserData as UserData).userId,
+            name: (props.adminUserData as UserData).name,
+            content: {
+              text: message,
+            },
           },
-        },
-      ]);
-      socketSendMessage(message);
+        ]);
+      });
     },
     [props.adminUserData],
   );
+
+  const updateWithBroadcastMessage = useCallback((message: Message) => {
+    setMessages((currentState) => [
+      ...currentState,
+      {
+        ...message,
+      },
+    ]);
+  }, []);
 
   useEffect(() => {
     if (msgViewerRef.current) {
@@ -41,14 +64,20 @@ function ChatWindow(props: ChatWindowProps) {
     }
   }, [messages]);
 
-  if (!props.adminUserData) {
-    return <div styleName="container">Loading......</div>;
-  }
+  useEffect(() => {
+    if (connectedAsViewer) {
+      subscribeToMessageBroadcast(updateWithBroadcastMessage);
+    }
+
+    return () => {
+      unsubscribeToMessageBroadcast();
+    };
+  }, [connectedAsViewer, updateWithBroadcastMessage]);
 
   return (
     <div styleName="container">
       <MessageViewer messages={messages} ref={msgViewerRef} />
-      <MessageInput sendMessage={sendMessage} />
+      <MessageInput sendMessage={sendMessage} disabled={!props.adminUserData} />
     </div>
   );
 }

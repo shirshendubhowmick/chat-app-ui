@@ -1,12 +1,13 @@
 import { io, Socket } from 'socket.io-client';
 import { socketStatusMap } from '~/constants';
-import { SocketStatus } from '~/types';
+import { Message, SocketStatus } from '~/types';
 
 let socket: Socket;
 
-interface AcknowledgementMessage {
+export interface AcknowledgementMessage {
   success: boolean;
   timestamp: Date;
+  msgId: number;
   error?: string;
 }
 
@@ -27,18 +28,38 @@ function initSocketConnection(
   });
 }
 
-function sendMessage(text: string) {
+function sendMessage(
+  text: string,
+  ackCallBack: (arg: AcknowledgementMessage) => void,
+) {
   socket.emit(
     'message',
     {
       text,
     },
     (ack: AcknowledgementMessage) => {
+      ackCallBack(ack);
       console.log(ack);
     },
   );
 }
 
+function subscribeToMessageBroadcast(updateMessage: (arg: Message) => void) {
+  console.log('Register broadcast');
+  socket.on('message', (payload: Message) => {
+    console.log('Received broadcast message', payload);
+    updateMessage(payload);
+  });
+}
+
+function unsubscribeToMessageBroadcast() {
+  socket.removeAllListeners('message');
+}
+
 export default initSocketConnection;
 
-export { sendMessage };
+export {
+  sendMessage,
+  subscribeToMessageBroadcast,
+  unsubscribeToMessageBroadcast,
+};

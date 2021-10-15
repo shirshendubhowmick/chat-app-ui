@@ -29,6 +29,8 @@ function Chat() {
         const { data }: { data: AdminUserPositionStatus } = res.data;
         if (data.isAdminUserPositionAvailable) {
           setShowAvatarSelector(true);
+        } else {
+          initSocketConnection(setSocketStatus);
         }
       })
       .catch((err) => {
@@ -63,7 +65,7 @@ function Chat() {
   return (
     <div styleName="container">
       <ChatHeader socketStatus={socketStatus} name={adminUserData?.name} />
-      <ChatWindow adminUserData={adminUserData} />
+      <ChatWindow socketStatus={socketStatus} adminUserData={adminUserData} />
       {showAvatarSelector && (
         <Modal headerContent="Select user">
           <p className="mb-24 font-medium">

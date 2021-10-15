@@ -23,4 +23,8 @@ function ChatHeader(props: ChatHeaderProps) {
   );
 }
 
+ChatHeader.defaultProps = {
+  name: 'viewer only',
+};
+
 export default ChatHeader;
