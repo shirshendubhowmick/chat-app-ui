@@ -43,6 +43,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@dr.pogodin/babel-plugin-react-css-modules": "^6.4.0",
     "@types/qs": "^6.9.7",
+    "@types/react": "^17.0.30",
     "@types/react-css-modules": "^4.6.4",
     "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
@@ -84,7 +85,6 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@types/react": "^17.0.29",
     "qs": "^6.10.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
