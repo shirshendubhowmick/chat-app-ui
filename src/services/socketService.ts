@@ -56,10 +56,19 @@ function unsubscribeToMessageBroadcast() {
   socket.removeAllListeners('message');
 }
 
+function subscribeToSystemMessage(updateMessage: (arg: Message) => void) {
+  console.log('Registered for system messages');
+  socket.on('systemMessage', (payload: Message) => {
+    console.log('Received system message', payload);
+    updateMessage(payload);
+  });
+}
+
 export default initSocketConnection;
 
 export {
   sendMessage,
   subscribeToMessageBroadcast,
   unsubscribeToMessageBroadcast,
+  subscribeToSystemMessage,
 };

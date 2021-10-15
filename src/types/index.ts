@@ -16,6 +16,7 @@ export type SocketStatus =
 export interface Message {
   id: number;
   name: string;
+  type: 'user' | 'system';
   userId: string;
   timestamp: Date;
   content: {

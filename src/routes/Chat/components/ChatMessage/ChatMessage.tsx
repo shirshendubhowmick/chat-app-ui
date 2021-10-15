@@ -7,6 +7,14 @@ export interface ChatMessageProps {
 }
 
 function ChatMessage(props: ChatMessageProps) {
+  if (props.message.type === 'system') {
+    return (
+      <div styleName="container system">
+        <p styleName="system-text">{props.message.content.text}</p>
+      </div>
+    );
+  }
+
   return (
     <div styleName="container">
       <p styleName="text">{props.message.content.text}</p>

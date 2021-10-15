@@ -4,6 +4,7 @@ import {
   AcknowledgementMessage,
   sendMessage as socketSendMessage,
   subscribeToMessageBroadcast,
+  subscribeToSystemMessage,
   unsubscribeToMessageBroadcast,
 } from '~/services/socketService';
 import MessageViewer from '../MessageViewer/MessageViewer';
@@ -70,6 +71,7 @@ function ChatWindow(props: ChatWindowProps) {
             content: {
               text: message,
             },
+            type: 'user',
           });
 
           return newState;
@@ -107,6 +109,12 @@ function ChatWindow(props: ChatWindowProps) {
   useEffect(() => {
     loadHistoricalMessages(setMessages);
   }, []);
+
+  useEffect(() => {
+    if (props.socketStatus === socketStatusMap.CONNECTED) {
+      subscribeToSystemMessage(updateWithBroadcastMessage);
+    }
+  }, [props.socketStatus, updateWithBroadcastMessage]);
 
   return (
     <div styleName="container">

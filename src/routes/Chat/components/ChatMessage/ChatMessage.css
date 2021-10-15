@@ -2,6 +2,10 @@
   composes: text-right mb-8 from global;
 }
 
+.system {
+  text-align: center;
+}
+
 .container:first-child {
   margin-top: auto;
 }
@@ -13,6 +17,13 @@
   border: 1px solid var(--color-blue);
   max-width: 70%;
   word-wrap: break-word;
+}
+
+.system-text {
+  composes: text;
+  padding: 4px;
+  border-color: var(--color-grey-500);
+  background-color: var(--color-grey-500);
 }
 
 .avatar {
