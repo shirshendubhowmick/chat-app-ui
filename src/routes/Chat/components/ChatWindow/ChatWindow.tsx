@@ -18,7 +18,7 @@ export interface ChatWindowProps {
 }
 
 function ChatWindow(props: ChatWindowProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Map<number, Message>>(new Map());
   const msgViewerRef = useRef<HTMLDivElement | null>(null);
 
   const connectedAsViewer =
@@ -32,9 +32,10 @@ function ChatWindow(props: ChatWindowProps) {
       }
 
       socketSendMessage(message, (ack: AcknowledgementMessage) => {
-        setMessages((currentState) => [
-          ...currentState,
-          {
+        setMessages((currentState) => {
+          const newState = new Map(currentState);
+
+          newState.set(ack.msgId, {
             id: ack.msgId,
             timestamp: ack.timestamp,
             userId: (props.adminUserData as UserData).userId,
@@ -42,20 +43,22 @@ function ChatWindow(props: ChatWindowProps) {
             content: {
               text: message,
             },
-          },
-        ]);
+          });
+
+          return newState;
+        });
       });
     },
     [props.adminUserData],
   );
 
   const updateWithBroadcastMessage = useCallback((message: Message) => {
-    setMessages((currentState) => [
-      ...currentState,
-      {
-        ...message,
-      },
-    ]);
+    setMessages((currentState) => {
+      const newState = new Map(currentState);
+
+      newState.set(message.id, message);
+      return newState;
+    });
   }, []);
 
   useEffect(() => {
