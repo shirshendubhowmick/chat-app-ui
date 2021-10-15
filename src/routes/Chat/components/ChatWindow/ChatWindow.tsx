@@ -8,13 +8,40 @@ import {
 } from '~/services/socketService';
 import MessageViewer from '../MessageViewer/MessageViewer';
 import { Message, SocketStatus, UserData } from '~/types';
+import initNetworkRequest from '~/services/networkServices';
 import { socketStatusMap } from '~/constants';
+import apiMap from '~/constants/apiMap';
 
 import './ChatWindow.css';
 
 export interface ChatWindowProps {
   adminUserData: UserData | null;
   socketStatus: SocketStatus;
+}
+
+function loadHistoricalMessages(
+  setMessages: React.Dispatch<React.SetStateAction<Map<number, Message>>>,
+) {
+  initNetworkRequest({
+    method: apiMap.GET_HISTORICAL_MESSAGES.method,
+    URL: API_URL + apiMap.GET_HISTORICAL_MESSAGES.endpoint,
+  })
+    .then((response) => {
+      const { data: oldMessages }: { data: Message[] } = response.data;
+      if (oldMessages.length) {
+        const oldMessagesMap = new Map<number, Message>();
+        oldMessages.forEach((message) => {
+          oldMessagesMap.set(message.id, message);
+        });
+        setMessages(
+          (currentState) =>
+            new Map([...currentState.entries(), ...oldMessages.entries()]),
+        );
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 function ChatWindow(props: ChatWindowProps) {
@@ -76,6 +103,10 @@ function ChatWindow(props: ChatWindowProps) {
       unsubscribeToMessageBroadcast();
     };
   }, [connectedAsViewer, updateWithBroadcastMessage]);
+
+  useEffect(() => {
+    loadHistoricalMessages(setMessages);
+  }, []);
 
   return (
     <div styleName="container">

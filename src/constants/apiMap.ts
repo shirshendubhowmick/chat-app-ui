@@ -12,6 +12,7 @@ const httpMethods: { [key in HttpMethods]: HttpMethods } = {
 const endpoint = {
   SESSION: '/user/session',
   SESSION_STATUS: '/status/session',
+  MESSAGE: '/message',
 };
 
 const apiMap: {
@@ -30,6 +31,10 @@ const apiMap: {
   },
   GET_SESSION_STATUS: {
     endpoint: endpoint.SESSION_STATUS,
+    method: httpMethods.GET,
+  },
+  GET_HISTORICAL_MESSAGES: {
+    endpoint: endpoint.MESSAGE,
     method: httpMethods.GET,
   },
 };
