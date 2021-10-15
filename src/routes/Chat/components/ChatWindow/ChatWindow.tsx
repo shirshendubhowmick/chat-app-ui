@@ -1,15 +1,49 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import MessageInput from '../MessageInput/MessageInput';
 import { sendMessage as socketSendMessage } from '~/services/socketService';
+import MessageViewer from '../MessageViewer/MessageViewer';
+import { Messages, UserData } from '~/types';
 
 import './ChatWindow.css';
 
-function ChatWindow() {
-  const sendMessage = useCallback((message: string) => {
-    socketSendMessage(message);
-  }, []);
+export interface ChatWindowProps {
+  adminUserData: UserData;
+}
+
+function ChatWindow(props: ChatWindowProps) {
+  const [messages, setMessages] = useState<Messages[]>([]);
+  const msgViewerRef = useRef<HTMLDivElement | null>(null);
+
+  const sendMessage = useCallback(
+    (message: string) => {
+      const sanitizedMessage = message.trim();
+      if (!sanitizedMessage) {
+        return;
+      }
+      setMessages((currentState) => [
+        ...currentState,
+        {
+          userId: props.adminUserData.userId,
+          name: props.adminUserData.name,
+          content: {
+            text: message,
+          },
+        },
+      ]);
+      socketSendMessage(message);
+    },
+    [props.adminUserData],
+  );
+
+  useEffect(() => {
+    if (msgViewerRef.current) {
+      msgViewerRef.current.scrollTop = msgViewerRef.current?.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <div styleName="container">
+      <MessageViewer messages={messages} ref={msgViewerRef} />
       <MessageInput sendMessage={sendMessage} />
     </div>
   );
