@@ -15,7 +15,7 @@ function MessageViewer(
   return (
     <div styleName="container" ref={ref}>
       {props.messages.map((message) => (
-        <ChatMessage message={message} />
+        <ChatMessage message={message} key={message.id} />
       ))}
     </div>
   );
