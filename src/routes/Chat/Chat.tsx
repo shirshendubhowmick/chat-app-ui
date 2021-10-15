@@ -67,7 +67,7 @@ function Chat() {
       <ChatHeader socketStatus={socketStatus} name={adminUserData?.name} />
       <ChatWindow socketStatus={socketStatus} adminUserData={adminUserData} />
       {showAvatarSelector && (
-        <Modal headerContent="Select user">
+        <Modal headerContent="Select user" showBackdrop>
           <p className="mb-24 font-medium">
             Select an Avatar to join as admin user
           </p>
