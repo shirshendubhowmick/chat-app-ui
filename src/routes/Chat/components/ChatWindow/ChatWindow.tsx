@@ -7,7 +7,7 @@ import { Messages, UserData } from '~/types';
 import './ChatWindow.css';
 
 export interface ChatWindowProps {
-  adminUserData: UserData;
+  adminUserData: UserData | null;
 }
 
 function ChatWindow(props: ChatWindowProps) {
@@ -23,8 +23,8 @@ function ChatWindow(props: ChatWindowProps) {
       setMessages((currentState) => [
         ...currentState,
         {
-          userId: props.adminUserData.userId,
-          name: props.adminUserData.name,
+          userId: (props.adminUserData as UserData).userId,
+          name: (props.adminUserData as UserData).name,
           content: {
             text: message,
           },
@@ -40,6 +40,10 @@ function ChatWindow(props: ChatWindowProps) {
       msgViewerRef.current.scrollTop = msgViewerRef.current?.scrollHeight;
     }
   }, [messages]);
+
+  if (!props.adminUserData) {
+    return <div styleName="container">Loading......</div>;
+  }
 
   return (
     <div styleName="container">

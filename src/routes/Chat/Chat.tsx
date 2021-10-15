@@ -63,7 +63,7 @@ function Chat() {
   return (
     <div styleName="container">
       <ChatHeader socketStatus={socketStatus} name={adminUserData?.name} />
-      <ChatWindow />
+      <ChatWindow adminUserData={adminUserData} />
       {showAvatarSelector && (
         <Modal headerContent="Select user">
           <p className="mb-24 font-medium">
