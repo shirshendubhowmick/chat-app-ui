@@ -10,6 +10,7 @@ import apiMap from '~/constants/apiMap';
 import { AdminUserPositionStatus, SocketStatus, UserData } from '~/types';
 import initSocketConnection from '~/services/socketService';
 import { socketStatusMap } from '~/constants';
+import ChatWindowLoading from './components/ChatWindowLoading/ChatWindowLoading';
 
 import './Chat.css';
 
@@ -19,6 +20,7 @@ function Chat() {
   const [socketStatus, setSocketStatus] = useState<SocketStatus>(
     socketStatusMap.CONNECTING,
   );
+  const [isStatusCheckDone, setIsStatusCheckDone] = useState(false);
 
   useEffect(() => {
     initNetworkRequest({
@@ -32,6 +34,7 @@ function Chat() {
         } else {
           initSocketConnection(setSocketStatus);
         }
+        setIsStatusCheckDone(true);
       })
       .catch((err) => {
         console.log(err);
@@ -65,7 +68,12 @@ function Chat() {
   return (
     <div styleName="container">
       <ChatHeader socketStatus={socketStatus} name={adminUserData?.name} />
-      <ChatWindow socketStatus={socketStatus} adminUserData={adminUserData} />
+      {!isStatusCheckDone || showAvatarSelector ? (
+        <ChatWindowLoading />
+      ) : (
+        <ChatWindow socketStatus={socketStatus} adminUserData={adminUserData} />
+      )}
+
       {showAvatarSelector && (
         <Modal headerContent="Select user" showBackdrop>
           <p className="mb-24 font-medium">
