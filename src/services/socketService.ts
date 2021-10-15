@@ -6,7 +6,7 @@ let socket: Socket;
 
 export interface AcknowledgementMessage {
   success: boolean;
-  timestamp: Date;
+  timestamp: string;
   msgId: number;
   error?: string;
 }

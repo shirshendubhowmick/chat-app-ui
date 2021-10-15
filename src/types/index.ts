@@ -18,7 +18,7 @@ export interface Message {
   name: string;
   type: 'user' | 'system';
   userId: string;
-  timestamp: Date;
+  timestamp: string;
   content: {
     text: string;
   };

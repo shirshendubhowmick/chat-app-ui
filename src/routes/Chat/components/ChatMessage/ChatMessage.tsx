@@ -17,8 +17,17 @@ function ChatMessage(props: ChatMessageProps) {
 
   return (
     <div styleName="container">
-      <p styleName="text">{props.message.content.text}</p>
-      <Avatar avatarId={props.message.userId} size="small" styleName="avatar" />
+      <p className="font-10">
+        {new Date(props.message.timestamp).toLocaleString('en-IN')}
+      </p>
+      <div>
+        <p styleName="text">{props.message.content.text}</p>
+        <Avatar
+          avatarId={props.message.userId}
+          size="small"
+          styleName="avatar"
+        />
+      </div>
     </div>
   );
 }
