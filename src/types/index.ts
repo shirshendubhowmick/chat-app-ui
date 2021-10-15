@@ -12,3 +12,11 @@ export type SocketStatus =
   | 'DISCONNECTED'
   | 'ERRORED'
   | 'CONNECTING';
+
+export interface Messages {
+  userId: string;
+  name: string;
+  content: {
+    text: string;
+  };
+}
