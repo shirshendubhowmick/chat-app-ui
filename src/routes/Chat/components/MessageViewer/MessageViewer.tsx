@@ -1,11 +1,11 @@
 import { ForwardedRef, forwardRef } from 'react';
 
-import { Messages } from '~/types';
+import { Message } from '~/types';
 import ChatMessage from '../ChatMessage/ChatMessage';
 import './MessageViewer.css';
 
 export interface MessageViewerProps {
-  messages: Messages[];
+  messages: Message[];
 }
 
 function MessageViewer(

@@ -3,6 +3,7 @@ import './MessageInput.css';
 
 export interface MessageInputProps {
   sendMessage(message: string): void;
+  disabled?: boolean;
 }
 
 function MessageInput(props: MessageInputProps) {
@@ -32,9 +33,14 @@ function MessageInput(props: MessageInputProps) {
         onChange={onChange}
         onKeyDown={onKeyDown}
         value={message}
+        disabled={props.disabled}
       />
     </div>
   );
 }
+
+MessageInput.defaultProps = {
+  disabled: false,
+};
 
 export default MessageInput;

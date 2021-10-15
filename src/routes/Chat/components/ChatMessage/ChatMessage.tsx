@@ -1,9 +1,9 @@
 import Avatar from '~/components/Avatar/Avatar';
-import { Messages } from '~/types';
+import { Message } from '~/types';
 import './ChatMessage.css';
 
 export interface ChatMessageProps {
-  message: Messages;
+  message: Message;
 }
 
 function ChatMessage(props: ChatMessageProps) {
