@@ -1,0 +1,7 @@
+.container {
+  composes: border-rounded mb-16 p-8 display-flex flex-column from global;
+  background-color: var(--color-beige);
+  flex: 1;
+  max-height: 758px;
+  overflow-y: auto;
+}
