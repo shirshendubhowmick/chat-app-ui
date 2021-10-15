@@ -1,5 +1,5 @@
 .container {
-  composes: p-24 from global;
+  composes: p-16 from global;
   background-color: var(--color-grey-200);
   flex: 1;
   border-radius: 0 0 4px 4px;
