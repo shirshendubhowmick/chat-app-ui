@@ -5,6 +5,7 @@ import './ChatHeader.css';
 export interface ChatHeaderProps {
   socketStatus: SocketStatus;
   name?: string;
+  onLogoutClick: () => void;
 }
 
 const headerTextMap: { [key in SocketStatus]: string } = {
@@ -23,7 +24,11 @@ function ChatHeader(props: ChatHeaderProps) {
           (props.name || 'viewer only')}
       </span>
       {Boolean(props.name) && (
-        <button type="button" styleName="logout-button">
+        <button
+          type="button"
+          styleName="logout-button"
+          onClick={props.onLogoutClick}
+        >
           Logout
         </button>
       )}

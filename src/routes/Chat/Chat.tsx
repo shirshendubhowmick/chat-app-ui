@@ -9,6 +9,7 @@ import initNetworkRequest from '~/services/networkServices';
 import apiMap from '~/constants/apiMap';
 import { AdminUserPositionStatus, SocketStatus, UserData } from '~/types';
 import initSocketConnection, {
+  disconnectSocket,
   subscribeToAdminPosition,
 } from '~/services/socketService';
 import { socketStatusMap } from '~/constants';
@@ -87,9 +88,27 @@ function Chat() {
     }
   }, []);
 
+  const onLogoutClick = useCallback(async () => {
+    try {
+      await initNetworkRequest({
+        method: apiMap.LOGOUT.method,
+        URL: API_URL + apiMap.LOGOUT.endpoint,
+      });
+      disconnectSocket(setSocketStatus);
+      setAdminUserData(null);
+      setShowAvatarSelector(true);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   return (
     <div styleName="container">
-      <ChatHeader socketStatus={socketStatus} name={adminUserData?.name} />
+      <ChatHeader
+        socketStatus={socketStatus}
+        name={adminUserData?.name}
+        onLogoutClick={onLogoutClick}
+      />
       {socketStatus !== socketStatusMap.CONNECTED ? (
         <ChatWindowLoading />
       ) : (

@@ -80,6 +80,13 @@ function subscribeToAdminPosition(
   };
 }
 
+function disconnectSocket(
+  setSocketDisconnect: React.Dispatch<React.SetStateAction<SocketStatus>>,
+) {
+  socket.disconnect();
+  setSocketDisconnect(socketStatusMap.DISCONNECTED);
+}
+
 export default initSocketConnection;
 
 export {
@@ -88,4 +95,5 @@ export {
   unsubscribeToMessageBroadcast,
   subscribeToSystemMessage,
   subscribeToAdminPosition,
+  disconnectSocket,
 };

@@ -37,6 +37,10 @@ const apiMap: {
     endpoint: endpoint.MESSAGE,
     method: httpMethods.GET,
   },
+  LOGOUT: {
+    endpoint: endpoint.SESSION,
+    method: httpMethods.DELETE,
+  },
 };
 
 export default apiMap;
