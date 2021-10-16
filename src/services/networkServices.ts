@@ -88,11 +88,14 @@ async function initNetworkRequest({
       body: JSON.stringify(body),
       credentials: 'include',
     });
+
     const returnObj: ApiResponseObject = {
       headers: response.headers,
       statusText: response.statusText,
       status: response.status,
-      data: await response.json(),
+      data: response.headers.get('Content-Length')
+        ? await response.json()
+        : null,
       fetchFailure: false,
       request: {
         requestUrl: URL,
