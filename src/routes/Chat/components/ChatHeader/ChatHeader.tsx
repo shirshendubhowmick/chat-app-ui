@@ -17,14 +17,18 @@ const headerTextMap: { [key in SocketStatus]: string } = {
 function ChatHeader(props: ChatHeaderProps) {
   return (
     <div styleName="container">
-      {headerTextMap[props.socketStatus]}
-      {props.socketStatus === socketStatusMap.CONNECTED && props.name}
+      <span styleName="header-text">
+        {headerTextMap[props.socketStatus]}
+        {props.socketStatus === socketStatusMap.CONNECTED &&
+          (props.name || 'viewer only')}
+      </span>
+      {Boolean(props.name) && (
+        <button type="button" styleName="logout-button">
+          Logout
+        </button>
+      )}
     </div>
   );
 }
-
-ChatHeader.defaultProps = {
-  name: 'viewer only',
-};
 
 export default ChatHeader;

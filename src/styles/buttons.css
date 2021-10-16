@@ -1,0 +1,6 @@
+.btn-inline {
+  background-color: var(--color-transparent);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
