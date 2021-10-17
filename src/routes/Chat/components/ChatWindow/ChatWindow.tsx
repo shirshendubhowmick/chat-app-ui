@@ -12,6 +12,8 @@ import { Message, SocketStatus, UserData } from '~/types';
 import initNetworkRequest from '~/services/networkServices';
 import { socketStatusMap } from '~/constants';
 import apiMap from '~/constants/apiMap';
+import showToast from '~/components/Toast';
+import toastMessageMap from '~/constants/toastMessageMap';
 
 import './ChatWindow.css';
 
@@ -42,6 +44,7 @@ function loadHistoricalMessages(
     })
     .catch((err) => {
       console.log(err);
+      showToast(toastMessageMap.error.ERROR_LOADING_HISTORICAL_MSGS, true);
     });
 }
 

@@ -5,13 +5,10 @@ export interface ToastEventDetail {
   type: 'error' | 'success';
 }
 
-function showToast(
-  msg: ToastEventDetail['msg'],
-  type: ToastEventDetail['type'] = 'success',
-) {
+function showToast(msg: ToastEventDetail['msg'], isError = false) {
   const event = new CustomEvent<ToastEventDetail>(eventName, {
     detail: {
-      type,
+      type: isError ? 'error' : 'success',
       msg,
     },
   });

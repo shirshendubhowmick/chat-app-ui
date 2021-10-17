@@ -15,6 +15,8 @@ import initSocketConnection, {
 import { socketStatusMap } from '~/constants';
 import ChatWindowLoading from './components/ChatWindowLoading/ChatWindowLoading';
 import apiErrorMap from '~/constants/apiErrorMap';
+import showToast from '~/components/Toast';
+import toastMessageMap from '~/constants/toastMessageMap';
 
 import './Chat.css';
 
@@ -40,6 +42,7 @@ function Chat() {
       })
       .catch((err) => {
         console.log(err);
+        showToast(toastMessageMap.error.ERROR_CHECKING_STATUS, true);
       });
   }, []);
 
@@ -81,6 +84,10 @@ function Chat() {
         const { errors } = err.data;
         if (errors?.[0].code === apiErrorMap.E005.code) {
           console.log(errors?.[0].detail);
+          showToast(
+            toastMessageMap.error.ADMIN_POSITION_NO_LONGER_AVAILABLE,
+            true,
+          );
           initSocketConnection(setSocketStatus);
           setShowAvatarSelector(false);
         }
@@ -99,6 +106,7 @@ function Chat() {
       setShowAvatarSelector(true);
     } catch (err) {
       console.log(err);
+      showToast(toastMessageMap.error.LOGOUT_ERROR, true);
     }
   }, []);
 
