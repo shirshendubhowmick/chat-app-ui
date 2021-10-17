@@ -48,7 +48,9 @@
   --color-green-rgb: 7, 188, 76;
   --color-green-deep: #1b9a59;
   --color-green-deep-rgb: 27, 154, 89;
+  --color-red: #ff4c4c;
 
   --z-index-modal-backdrop: 400;
   --z-index-modal: 500;
+  --z-index-toast: 900;
 }

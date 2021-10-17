@@ -1,0 +1,7 @@
+.container {
+  composes: position-fixed from global;
+  bottom: 16px;
+  left: 16px;
+  min-width: 250px;
+  z-index: var(--z-index-toast);
+}
