@@ -2,7 +2,7 @@ import './Toast.css';
 
 export interface ToastProps {
   type?: 'error' | 'success';
-  children: JSX.Element;
+  children: JSX.Element | string;
 }
 
 function Toast(props: ToastProps) {
