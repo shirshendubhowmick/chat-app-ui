@@ -90,6 +90,8 @@ function Chat() {
           );
           initSocketConnection(setSocketStatus);
           setShowAvatarSelector(false);
+        } else {
+          showToast(toastMessageMap.error.DEFAULT, true);
         }
       }
     }
