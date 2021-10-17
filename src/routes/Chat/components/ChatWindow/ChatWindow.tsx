@@ -5,7 +5,6 @@ import {
   sendMessage as socketSendMessage,
   subscribeToMessageBroadcast,
   subscribeToSystemMessage,
-  unsubscribeToMessageBroadcast,
 } from '~/services/socketService';
 import MessageViewer from '../MessageViewer/MessageViewer';
 import { Message, SocketStatus, UserData } from '~/types';
@@ -100,12 +99,13 @@ function ChatWindow(props: ChatWindowProps) {
   }, [messages]);
 
   useEffect(() => {
+    let unsubscribe: () => void;
     if (connectedAsViewer) {
-      subscribeToMessageBroadcast(updateWithBroadcastMessage);
+      unsubscribe = subscribeToMessageBroadcast(updateWithBroadcastMessage);
     }
 
     return () => {
-      unsubscribeToMessageBroadcast();
+      unsubscribe();
     };
   }, [connectedAsViewer, updateWithBroadcastMessage]);
 

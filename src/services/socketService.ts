@@ -1,5 +1,7 @@
 import { io, Socket } from 'socket.io-client';
+import showToast from '~/components/Toast';
 import { socketStatusMap } from '~/constants';
+import toastMessageMap from '~/constants/toastMessageMap';
 import { Message, SocketStatus } from '~/types';
 
 let socket: Socket;
@@ -19,11 +21,13 @@ function initSocketConnection(
   });
   socket.on('connect', () => {
     console.log('Socket connection established, socket id', socket.id);
+    showToast(toastMessageMap.success.SOCKET_CONNECTED);
     setSocketConnected(socketStatusMap.CONNECTED);
   });
 
   socket.on('disconnect', () => {
     console.log('Socket disconnected, socket id', socket.id);
+    showToast(toastMessageMap.error.SOCKET_DISCONNECTED, true);
     setSocketConnected(socketStatusMap.DISCONNECTED);
   });
 }
@@ -46,14 +50,14 @@ function sendMessage(
 
 function subscribeToMessageBroadcast(updateMessage: (arg: Message) => void) {
   console.log('Register broadcast');
-  socket.on('message', (payload: Message) => {
+  const receivedBroadcastMessage = (payload: Message) => {
     console.log('Received broadcast message', payload);
     updateMessage(payload);
-  });
-}
-
-function unsubscribeToMessageBroadcast() {
-  socket.removeAllListeners('message');
+  };
+  socket.on('message', receivedBroadcastMessage);
+  return () => {
+    socket.off('message', receivedBroadcastMessage);
+  };
 }
 
 function subscribeToSystemMessage(updateMessage: (arg: Message) => void) {
@@ -70,6 +74,7 @@ function subscribeToAdminPosition(
   console.log('Registered for admin position availability');
   const adminPositionAvailable = () => {
     console.log('Received admin position availability message');
+    showToast(toastMessageMap.success.ADMIN_USER_LEFT);
     setState(true);
     socket.disconnect();
   };
@@ -92,7 +97,6 @@ export default initSocketConnection;
 export {
   sendMessage,
   subscribeToMessageBroadcast,
-  unsubscribeToMessageBroadcast,
   subscribeToSystemMessage,
   subscribeToAdminPosition,
   disconnectSocket,
