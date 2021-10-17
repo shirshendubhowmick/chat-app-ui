@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import './MessageInput.css';
 
 export interface MessageInputProps {
-  sendMessage(message: string): void;
+  sendMessage(message: string): Promise<void>;
   disabled?: boolean;
 }
 
@@ -14,11 +14,15 @@ function MessageInput(props: MessageInputProps) {
   }, []);
 
   const onKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.code === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        props.sendMessage(message);
-        setMessage('');
+        try {
+          await props.sendMessage(message);
+          setMessage('');
+        } catch (err) {
+          console.log('Send msg failed');
+        }
       }
     },
     [message, props],

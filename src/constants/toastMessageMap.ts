@@ -14,6 +14,7 @@ const toastMessageMap = {
     SOCKET_DISCONNECTED: 'Chat server disconnected',
     SOCKET_CONNECTION_ERRORED:
       'Error establshing socket connection to chat server',
+    ERROR_SENDING_MESSAGE: 'Error sending chat messages',
   },
 };
 

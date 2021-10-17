@@ -55,31 +55,40 @@ function ChatWindow(props: ChatWindowProps) {
     props.socketStatus === socketStatusMap.CONNECTED && !props.adminUserData;
 
   const sendMessage = useCallback(
-    (message: string) => {
-      const sanitizedMessage = message.trim();
-      if (!sanitizedMessage) {
-        return;
-      }
+    (message: string): Promise<void> =>
+      new Promise<void>((resolve, reject) => {
+        const sanitizedMessage = message.trim();
+        if (!sanitizedMessage) {
+          resolve();
+          return;
+        }
 
-      socketSendMessage(message, (ack: AcknowledgementMessage) => {
-        setMessages((currentState) => {
-          const newState = new Map(currentState);
+        socketSendMessage(message, (ack: AcknowledgementMessage) => {
+          if (!ack.success) {
+            showToast(toastMessageMap.error.ERROR_SENDING_MESSAGE, true);
+            reject();
+            return;
+          }
+          setMessages((currentState) => {
+            const newState = new Map(currentState);
 
-          newState.set(ack.msgId, {
-            id: ack.msgId,
-            timestamp: ack.timestamp,
-            userId: (props.adminUserData as UserData).userId,
-            name: (props.adminUserData as UserData).name,
-            content: {
-              text: message,
-            },
-            type: 'user',
+            newState.set(ack.msgId, {
+              id: ack.msgId,
+              timestamp: ack.timestamp,
+              userId: (props.adminUserData as UserData).userId,
+              name: (props.adminUserData as UserData).name,
+              content: {
+                text: message,
+              },
+              type: 'user',
+            });
+
+            resolve();
+
+            return newState;
           });
-
-          return newState;
         });
-      });
-    },
+      }),
     [props.adminUserData],
   );
 
