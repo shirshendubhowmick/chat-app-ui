@@ -1,0 +1,13 @@
+.container {
+  composes: pl-8 pr-8 pt-16 pb-16 border-rounded from global;
+  border: 2px solid;
+  background-color: var(--color-white);
+}
+
+.success {
+  border-color: var(--color-green-deep);
+}
+
+.error {
+  border-color: var(--color-red);
+}
