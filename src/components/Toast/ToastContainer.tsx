@@ -7,6 +7,8 @@ interface ToastsState extends ToastProps {
   id: number;
 }
 
+const TOAST_TIMEOUT_MS = 3000;
+
 function ToastContainer() {
   const [toasts, setToasts] = useState<ToastsState[]>([]);
   const intervalRef = useRef<number>();
@@ -39,7 +41,7 @@ function ToastContainer() {
         }
         return currentState.slice(1);
       });
-    }, 1500);
+    }, TOAST_TIMEOUT_MS);
   }, []);
 
   useEffect(() => {
