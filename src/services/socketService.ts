@@ -18,6 +18,8 @@ function initSocketConnection(
 ) {
   socket = io(SOCKET_URL, {
     withCredentials: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 4000,
   });
   socket.on('connect', () => {
     console.log('Socket connection established, socket id', socket.id);
@@ -26,9 +28,21 @@ function initSocketConnection(
   });
 
   socket.on('disconnect', () => {
-    console.log('Socket disconnected, socket id', socket.id);
+    console.log('Socket disconnected');
     showToast(toastMessageMap.error.SOCKET_DISCONNECTED, true);
     setSocketConnected(socketStatusMap.DISCONNECTED);
+  });
+
+  socket.on('connect_error', () => {
+    console.log('Socket connection errored');
+    showToast(toastMessageMap.error.SOCKET_CONNECTION_ERRORED, true);
+    setSocketConnected(socketStatusMap.ERRORED);
+  });
+
+  socket.on('reconnect', () => {
+    console.log('Socket re connected');
+    showToast(toastMessageMap.success.SOCKET_RECONNECTED);
+    setSocketConnected(socketStatusMap.CONNECTED);
   });
 }
 

@@ -105,7 +105,7 @@ function ChatWindow(props: ChatWindowProps) {
     }
 
     return () => {
-      unsubscribe();
+      unsubscribe?.();
     };
   }, [connectedAsViewer, updateWithBroadcastMessage]);
 
