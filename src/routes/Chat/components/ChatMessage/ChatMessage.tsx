@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown';
 import Avatar from '~/components/Avatar/Avatar';
 import { Message } from '~/types';
 import './ChatMessage.css';
@@ -21,7 +22,9 @@ function ChatMessage(props: ChatMessageProps) {
         {new Date(props.message.timestamp).toLocaleString('en-IN')}
       </p>
       <div>
-        <p styleName="text">{props.message.content.text}</p>
+        <ReactMarkdown styleName="text">
+          {props.message.content.text}
+        </ReactMarkdown>
         <Avatar
           avatarId={props.message.userId}
           size="small"
