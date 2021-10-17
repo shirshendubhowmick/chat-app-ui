@@ -55,12 +55,14 @@ function ChatWindow(props: ChatWindowProps) {
     props.socketStatus === socketStatusMap.CONNECTED && !props.adminUserData;
 
   const sendMessage = useCallback(
-    (message: string): Promise<void> =>
+    (message: string, isTypeFile = false): Promise<void> =>
       new Promise<void>((resolve, reject) => {
-        const sanitizedMessage = message.trim();
-        if (!sanitizedMessage) {
-          resolve();
-          return;
+        if (!isTypeFile) {
+          const sanitizedMessage = message.trim();
+          if (!sanitizedMessage) {
+            resolve();
+            return;
+          }
         }
 
         socketSendMessage(message, (ack: AcknowledgementMessage) => {
