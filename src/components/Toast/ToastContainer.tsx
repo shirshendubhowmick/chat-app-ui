@@ -36,7 +36,6 @@ function ToastContainer() {
     intervalRef.current = window.setInterval(() => {
       setToasts((currentState) => {
         if (currentState.length === 1) {
-          console.log('Clearning interval');
           clearInterval(intervalRef.current);
         }
         return currentState.slice(1);
