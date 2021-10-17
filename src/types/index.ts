@@ -17,9 +17,11 @@ export interface Message {
   id: number;
   name: string;
   type: 'user' | 'system';
+
   userId: string;
   timestamp: string;
   content: {
-    text: string;
+    data: string;
+    type: 'text' | 'image';
   };
 }

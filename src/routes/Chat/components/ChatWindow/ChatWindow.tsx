@@ -80,7 +80,8 @@ function ChatWindow(props: ChatWindowProps) {
               userId: (props.adminUserData as UserData).userId,
               name: (props.adminUserData as UserData).name,
               content: {
-                text: message,
+                data: message,
+                type: 'text',
               },
               type: 'user',
             });

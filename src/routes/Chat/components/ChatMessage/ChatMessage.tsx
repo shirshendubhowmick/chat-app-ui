@@ -11,7 +11,7 @@ function ChatMessage(props: ChatMessageProps) {
   if (props.message.type === 'system') {
     return (
       <div styleName="container system">
-        <p styleName="system-text">{props.message.content.text}</p>
+        <p styleName="system-text">{props.message.content.data}</p>
       </div>
     );
   }
@@ -23,7 +23,7 @@ function ChatMessage(props: ChatMessageProps) {
       </p>
       <div>
         <ReactMarkdown styleName="text">
-          {props.message.content.text}
+          {props.message.content.data}
         </ReactMarkdown>
         <Avatar
           avatarId={props.message.userId}
