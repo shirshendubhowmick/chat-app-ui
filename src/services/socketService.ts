@@ -47,19 +47,13 @@ function initSocketConnection(
 }
 
 function sendMessage(
-  text: string,
+  data: Message['content'],
   ackCallBack: (arg: AcknowledgementMessage) => void,
 ) {
-  socket.emit(
-    'message',
-    {
-      text,
-    },
-    (ack: AcknowledgementMessage) => {
-      ackCallBack(ack);
-      console.log(ack);
-    },
-  );
+  socket.emit('message', data, (ack: AcknowledgementMessage) => {
+    ackCallBack(ack);
+    console.log(ack);
+  });
 }
 
 function subscribeToMessageBroadcast(updateMessage: (arg: Message) => void) {

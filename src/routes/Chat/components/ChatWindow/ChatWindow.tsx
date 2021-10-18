@@ -65,32 +65,38 @@ function ChatWindow(props: ChatWindowProps) {
           }
         }
 
-        socketSendMessage(message, (ack: AcknowledgementMessage) => {
-          if (!ack.success) {
-            showToast(toastMessageMap.error.ERROR_SENDING_MESSAGE, true);
-            reject();
-            return;
-          }
-          setMessages((currentState) => {
-            const newState = new Map(currentState);
+        socketSendMessage(
+          {
+            data: message,
+            type: isTypeFile ? 'image' : 'text',
+          },
+          (ack: AcknowledgementMessage) => {
+            if (!ack.success) {
+              showToast(toastMessageMap.error.ERROR_SENDING_MESSAGE, true);
+              reject();
+              return;
+            }
+            setMessages((currentState) => {
+              const newState = new Map(currentState);
 
-            newState.set(ack.msgId, {
-              id: ack.msgId,
-              timestamp: ack.timestamp,
-              userId: (props.adminUserData as UserData).userId,
-              name: (props.adminUserData as UserData).name,
-              content: {
-                data: message,
-                type: 'text',
-              },
-              type: 'user',
+              newState.set(ack.msgId, {
+                id: ack.msgId,
+                timestamp: ack.timestamp,
+                userId: (props.adminUserData as UserData).userId,
+                name: (props.adminUserData as UserData).name,
+                content: {
+                  data: message,
+                  type: isTypeFile ? 'image' : 'text',
+                },
+                type: 'user',
+              });
+
+              resolve();
+
+              return newState;
             });
-
-            resolve();
-
-            return newState;
-          });
-        });
+          },
+        );
       }),
     [props.adminUserData],
   );

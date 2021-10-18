@@ -18,13 +18,22 @@ function ChatMessage(props: ChatMessageProps) {
 
   return (
     <div styleName="container">
-      <p className="font-10">
+      <p className="font-10 mb-4">
         {new Date(props.message.timestamp).toLocaleString('en-IN')}
       </p>
       <div>
-        <ReactMarkdown styleName="text">
-          {props.message.content.data}
-        </ReactMarkdown>
+        {props.message.content.type === 'text' ? (
+          <ReactMarkdown styleName="text">
+            {props.message.content.data}
+          </ReactMarkdown>
+        ) : (
+          <img
+            src={props.message.content.data}
+            styleName="image-preview"
+            alt=""
+          />
+        )}
+
         <Avatar
           avatarId={props.message.userId}
           size="small"

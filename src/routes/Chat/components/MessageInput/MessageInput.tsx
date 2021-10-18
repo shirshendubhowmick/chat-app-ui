@@ -11,7 +11,7 @@ export interface MessageInputProps {
   disabled?: boolean;
 }
 
-const MAX_FILE_SIZE = 2048;
+const MAX_FILE_SIZE = 500 * 1024;
 
 const fileReader = new FileReader();
 
@@ -56,12 +56,11 @@ function MessageInput(props: MessageInputProps) {
 
   const handleImageUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      console.log(e.target.size);
       if (!e.target.files) {
         return;
       }
 
-      if (e.target.size > MAX_FILE_SIZE) {
+      if (e.target.files[0].size > MAX_FILE_SIZE) {
         showToast(toastMessageMap.error.MAX_FILE_LIMIT_REACHED, true);
         return;
       }
@@ -82,7 +81,12 @@ function MessageInput(props: MessageInputProps) {
         value={message}
         disabled={props.disabled}
       />
-      <label htmlFor="image-upload" styleName="image-upload">
+      <label
+        htmlFor="image-upload"
+        styleName={`image-upload ${
+          props.disabled ? 'image-upload-disabled' : ''
+        }`}
+      >
         Attach image
         <input
           type="file"
@@ -90,6 +94,7 @@ function MessageInput(props: MessageInputProps) {
           id="image-upload"
           className="display-none"
           onChange={handleImageUpload}
+          disabled={props.disabled}
         />
       </label>
     </div>

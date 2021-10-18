@@ -15,7 +15,7 @@ const toastMessageMap = {
     SOCKET_CONNECTION_ERRORED:
       'Error establshing socket connection to chat server',
     ERROR_SENDING_MESSAGE: 'Error sending chat messages',
-    MAX_FILE_LIMIT_REACHED: 'The file should to be less than 2MB',
+    MAX_FILE_LIMIT_REACHED: 'The file should to be less than 500 KB',
   },
 };
 

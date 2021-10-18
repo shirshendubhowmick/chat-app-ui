@@ -13,3 +13,8 @@
   background-color: var(--color-blue);
   color: var(--color-white);
 }
+
+.image-upload-disabled {
+  composes: cursor-not-allowed from global;
+  opacity: 0.8;
+}

@@ -56,3 +56,9 @@ a:visited {
   composes: vertical-align-middle from global;
   background-color: var(--color-white);
 }
+
+.image-preview {
+  composes: mr-8 vertical-align-top from global;
+  max-width: 60%;
+  height: auto;
+}
