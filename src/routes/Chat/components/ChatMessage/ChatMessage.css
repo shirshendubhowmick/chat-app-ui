@@ -58,7 +58,7 @@ a:visited {
 }
 
 .image-preview {
-  composes: mr-8 vertical-align-top from global;
+  composes: mr-8 vertical-align-top border-rounded from global;
   max-width: 60%;
   height: auto;
 }
