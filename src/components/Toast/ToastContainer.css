@@ -1,6 +1,7 @@
 .container {
-  composes: position-fixed from global;
+  composes: position-fixed display-flex flex-column from global;
   bottom: 16px;
+  align-items: flex-start;
   left: 16px;
   min-width: 250px;
   z-index: var(--z-index-toast);
