@@ -7,7 +7,7 @@ interface ToastsState extends ToastProps {
   id: number;
 }
 
-const TOAST_TIMEOUT_MS = 3000;
+const TOAST_TIMEOUT_MS = 4000;
 
 function ToastContainer() {
   const [toasts, setToasts] = useState<ToastsState[]>([]);
