@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import ChatHeader from './components/ChatHeader/ChatHeader';
 import ChatWindow from './components/ChatWindow/ChatWindow';
@@ -17,6 +17,9 @@ import ChatWindowLoading from './components/ChatWindowLoading/ChatWindowLoading'
 import apiErrorMap from '~/constants/apiErrorMap';
 import showToast from '~/components/Toast';
 import toastMessageMap from '~/constants/toastMessageMap';
+import initStorageEventListeners, {
+  removeStorageEventListener,
+} from '~/services/storageServices';
 
 import './Chat.css';
 
@@ -26,6 +29,30 @@ function Chat() {
   const [socketStatus, setSocketStatus] = useState<SocketStatus>(
     socketStatusMap.CONNECTING,
   );
+
+  const eventListener = useRef<(e: StorageEvent) => void>();
+
+  const onLogoutClick = useCallback(async () => {
+    try {
+      await initNetworkRequest({
+        method: apiMap.LOGOUT.method,
+        URL: API_URL + apiMap.LOGOUT.endpoint,
+      });
+      disconnectSocket(setSocketStatus);
+      setAdminUserData(null);
+      setShowAvatarSelector(true);
+    } catch (err) {
+      console.log(err);
+      showToast(toastMessageMap.error.LOGOUT_ERROR, true);
+    }
+  }, []);
+
+  const handleDuplicateTabLogout = useCallback(() => {
+    if (adminUserData) {
+      onLogoutClick();
+      showToast(toastMessageMap.error.LOGGEDOUT_DUPLICATE_TAB, true);
+    }
+  }, [onLogoutClick, adminUserData]);
 
   useEffect(() => {
     initNetworkRequest({
@@ -48,11 +75,19 @@ function Chat() {
 
   useEffect(() => {
     if (adminUserData) {
-      console.log(adminUserData);
+      eventListener.current = initStorageEventListeners(
+        handleDuplicateTabLogout,
+      );
       setShowAvatarSelector(false);
       initSocketConnection(setSocketStatus);
     }
-  }, [adminUserData]);
+
+    return () => {
+      if (eventListener.current) {
+        removeStorageEventListener(eventListener.current);
+      }
+    };
+  }, [adminUserData, handleDuplicateTabLogout]);
 
   useEffect(() => {
     let unsubscribe: () => void;
@@ -94,21 +129,6 @@ function Chat() {
           showToast(toastMessageMap.error.DEFAULT, true);
         }
       }
-    }
-  }, []);
-
-  const onLogoutClick = useCallback(async () => {
-    try {
-      await initNetworkRequest({
-        method: apiMap.LOGOUT.method,
-        URL: API_URL + apiMap.LOGOUT.endpoint,
-      });
-      disconnectSocket(setSocketStatus);
-      setAdminUserData(null);
-      setShowAvatarSelector(true);
-    } catch (err) {
-      console.log(err);
-      showToast(toastMessageMap.error.LOGOUT_ERROR, true);
     }
   }, []);
 
