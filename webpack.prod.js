@@ -6,12 +6,16 @@ const TerserPlugin = require('terser-webpack-plugin');
 const common = require('./webpack.common');
 
 const commonWebpackConstants = require('./webpackConstants/common');
-const developmentWebpackConstants = require('./webpackConstants/development');
+const productionWebpackConstants = require('./webpackConstants/production');
 
 const finalWebpackConstants = {
   ...commonWebpackConstants,
-  ...developmentWebpackConstants,
+  ...productionWebpackConstants,
 };
+
+Object.keys(finalWebpackConstants).forEach((key) => {
+  finalWebpackConstants[key] = JSON.stringify(finalWebpackConstants[key]);
+});
 
 module.exports = merge(common, {
   mode: 'production',
@@ -31,7 +35,7 @@ module.exports = merge(common, {
         minifyURLs: true,
       },
     }),
-    DefinePlugin({
+    new DefinePlugin({
       ...finalWebpackConstants,
     }),
   ],
